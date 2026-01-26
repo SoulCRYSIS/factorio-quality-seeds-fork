@@ -67,6 +67,7 @@ data.raw["recipe"]["pentapod-egg"].hide_from_signal_gui = false
 -- Define the global ignore list if not already defined
 quality_seeds = quality_seeds or {}
 quality_seeds.ignore_plants = quality_seeds.ignore_plants or {}
+quality_seeds.allow_plants = quality_seeds.allow_plants or {}
 
 
 if mods["zen-garden"] then

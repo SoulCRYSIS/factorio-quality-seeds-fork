@@ -155,7 +155,10 @@ local function create_quality_plant(plant_prototype, seed_prototype)
         scale = 0.5
       }))
 
-  local shift = { variation_trunk.shift[1] + 0.1, variation_trunk.shift[2] + 0.0 }
+  local shift = nil
+  if variation_trunk.shift then
+    shift = { variation_trunk.shift[1] + 0.1, variation_trunk.shift[2] + 0.0 }
+  end
 
   table.insert(agricultural_graphics.animation.layers, {
     filename = variation_trunk.filename,
@@ -501,8 +504,11 @@ local function create_quality_plant(plant_prototype, seed_prototype)
       { type = "unlock-recipe", recipe = recipe_cultivate.name })
     table.insert(data.raw.technology["boompuff-ascension"]["effects"],
       { type = "unlock-recipe", recipe = cultivator_recipe.name })
-    table.insert(data.raw.technology["boompuff-ascension"]["effects"], { type = "unlock-recipe", recipe = recipe_gmo
-    .name })
+    table.insert(data.raw.technology["boompuff-ascension"]["effects"], {
+      type = "unlock-recipe",
+      recipe = recipe_gmo
+          .name
+    })
     return
   end
 
@@ -514,19 +520,24 @@ local function create_quality_plant(plant_prototype, seed_prototype)
 end
 
 log("Looking for plants to quality...")
-local count = 0
 
 local ignore_set = {}
 for _, name in pairs(quality_seeds.ignore_plants or {}) do
   ignore_set[name] = true
 end
 
-for key, plant in pairs(data.raw["plant"]) do
-  if not ignore_set[plant.name] then
-    log("Processing plant " .. plant.name)
-    create_quality_plant(plant, nil)
-    count = count + 1
-  else
-    log("Skipping ignored plant " .. plant.name)
+if #quality_seeds.allow_plants == 0 then
+  for _, plant in pairs(data.raw["plant"]) do
+    if not ignore_set[plant.name] then
+      log("Processing plant " .. plant.name)
+      create_quality_plant(plant, nil)
+    else
+      log("Skipping ignored plant " .. plant.name)
+    end
+  end
+else
+  for _, name in pairs(quality_seeds.allow_plants) do
+    log("Processing plant " .. name)
+    create_quality_plant(data.raw["plant"][name], nil)
   end
 end
