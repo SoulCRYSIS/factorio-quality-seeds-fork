@@ -1,0 +1,124 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2025-07-13
+  Features:
+    - Update for compatibility with Fluid Nutrients mod for space cultivators.
+    - Added a skip-list, plants in this list will be ignored by the mod, this allows other mod creators to intentionally remove support for certain plants as desired. Zen Gardens plants have been skipped by default.
+    - Fixed an issue with icon vs icons when plants with a single sprite are found.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2025-01-30
+  Features:
+    - Updated for native support for Demolisher Agriculture Mod. Make Quality Tungsten today!
+    - Added a mod setting, which allows free-placement of cultivators on any land tile when activated, and disables the generation of excess collision layers. Useful if you have too many mods which create too many collision layers!
+    - Updated the seed symbiosis recipes to no longer relly on random values. A seed for a seed. And a 50th chance for the pentapod egg back (as was always the case, but now no longer does this rounda-about ways with the 50% biochamber productivity offsetting the values.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2025-01-02
+  Features:
+    - Corrected how much spores are used per process for the spore vent to release spores.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2024-12-31
+  Features:
+    - Cultivators now output 30% of the regular amount of results per craft. However cultivators can now accept productivity modules.
+    - Corrected how much spores are used per process for the spore vent to release less spores.
+    - Added a "balance" setting during start-up, defaults to true, however turning it to false will keep the full amount of cultivation results per craft as per pre 1.2. This is also in line with pre version 1.0.0 balance.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2024-12-27
+  Bugfixes:
+    - Theres a bug with short spoil timer items, and long craft times, which affects cultivation of short spoil items such as Stingfronds from my other mod. Even with forcing always fresh results, this would result in spoiled results. To overcome this, cultivators now maintain the freshness of their outputs indefinitely (like a biter spawner).
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2024-12-25
+  Features:
+    - Spore vents can now be flipped.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2024-12-22
+  Bugfixes:
+    - Fixed a bug with how the recycling recipes were added which broke several other recycling recipes.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2024-12-22
+  Features:
+    - Added correct recycling recipes to all cultivators - enjoy your gambling!
+    - Altered the visibility of the pentapod egg recipe, as well as the modded symbiosis recipes to the circuit network, such that there are work-arounds for those wishing to use these recipes in circuits.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2024-12-18
+  Features:
+    - Take Gleba to the only place that hasn't been corrupted by capitalism.
+    - Adds research "Space Cultivation", which allows the growing of trees in space in a similar manner to how Cultivators work.
+    - Space Cultivators do not produce gaseous by-products, but do still require water, and seeds.
+    - Things grow surprisingly well in space, and can be enhanced with productivity.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2024-12-17
+  Bugfixes:
+    - More robust checking to not crash on plants that dont have variations.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024-12-17
+  Bugfixes:
+    - More robust checking to not crash on plants that are not minable.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024-12-17
+  Changes:
+    - Updated graphic for the cultivator to include neat little water feature.
+  Bugfixes:
+    - Now compatible with wayward seas, a Gleba overhaul mod that introduced some extra plants.
+    - More robust to detecting the tile buildability rules for plants that are not defined in autoplace.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024-12-02
+  Changes:
+    - Please note, this update will significantly change your experience with Quality Seeds!
+    - Existing greenhouses will not be lost, however you may need to reset their recipes.
+    - Automatically generates Cultivation content based on existing plant prototypes in the game - this should support any other mod that creates custom plants, with plantname-seed as the seed. Including all my other Gleba Agricultural mods!
+    - Fruit Cultivation renamed to Cultivation, research cost increased to 2000 of each science respectively.
+    - Seed Cultivation research and associated recipes simply moved to Cultivation.
+    - Iterating over seeds is now lossless, but also garunteed gainless. Requires Pentapod eggs, and Spores, however spores will still be remaining after recipe. These recipes are now mainly useful for maintaining seeds for other things like slipstacks.
+    - Ratios of Seed -> Result are now simply maintained during cultivation.
+    - Cultivation requires water, and nutrients as a fuel, and takes 50% longer (compared to a single tree growing)
+    - If harvesting a tree releases spores, then spores are released when cultivating, and spores as a fluid are a result of the recipe.
+    - Trees that are harvested without spores still release a small amount of heated steam, which can be utilised for a small power boost, or fed back in losslessly as water via condensation.
+    - Added Spores as a fluid, which need to be vented at an appropriate location. (Looking into captive Gleba spawners being fed spores in a future mod!)
+    - Added Spores Vents as a new building, which controls the release of spores into the atmosphere.
+    - Failing to vent spores, (and destroying any fluid container holding spores) will result in those spores being directly released into the environment.
+    - Spores can be stored, but the ratio of spore fluid / spore pollution is such that storage is painful (1500 spores = 1 regularly harvested trees worth of spores)
+    - Updated Greenhouse graphic and icons, now includes the graphics of the tree being harvested, as well as animations remenescient of the agricultural tower.
+    - All greenhouses are unlocked when Cultivation is researched, Greenhouses can only be placed on the terrains that was supported by the original tree.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2024-12-02
+  Changes:
+    - Fruit Cultivation now gives you less fruit per seed (1 seed -> 10 Fruit). Now requires Full legendary production modules for both fruit cultivation and processing to break seed even.
+    - Seed Cultivation now consumes pentapod eggs, with a 1/4 chance of keeping the egg. Requiring either productivity modules, or external pentapod egg input.
+  BugFix:
+    - Changelog now correctly appears ingame.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2024-12-02
+  Changes:
+    - Fruit Cultivation now outputs steam at 165 degrees, to allow for power generation from steam by-product if desired.
+    - Fruit Cultivation now gives you less fruit per seed (1 seed -> 15 Fruit).
+    - Removed Greenhouse productivity bonus of 50%, unintentionally inherited from biochamber.
+    - Improved the graphics for Greenhouse icons, and for both research techs.
+  Features:
+    - Added biochamber recipe for seed cultivation using pentapod eggs.
+    - Removed Cryogenic chamber requirements, and old radiation recipe.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2024-11-25
+  BugFix:
+    - Updated icons for Greenhouse items to display correctly.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2024-11-24
+  Features:
+    - Added Cryogenic chamber recipe for seed cultivation using uranium.
+    - Add Fruit cultivate recipe, which requires water, and seeds, and outputs fruit.
+    - Add Greenhouses for Yumako and Jellynut cultivate recipe.

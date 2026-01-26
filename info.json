@@ -1,0 +1,10 @@
+{
+  "name": "quality-seeds",
+  "version": "1.3.0",
+  "title": "Quality Seeds",
+  "author": "Michael Michael",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0.0", "quality >= 2.0.0", "space-age >= 2.0.0"],
+  "description": "This mod gives you a reason to have high quality seeds. \nAdds a custom Greenhouse cultivator for every plant (Wood, Yumako, and Jellystem + will affect other modded plants!) \nPlants that release spores will release twice as many spores, via a new spores fluid. \nSpores can be released back into the atmosphere at a controlled location by destroying their containing entity, or using a Spore Vent.\nFinally, there is now also the end-game treat of plants in space!",
+  "quality_required": true
+}

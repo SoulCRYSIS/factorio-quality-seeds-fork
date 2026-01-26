@@ -1,0 +1,12 @@
+{
+  "entity":
+  [
+    ["yumako-greenhouse", "yumako-tree-greenhouse"],
+    ["jellynut-greenhouse", "jellystem-greenhouse"]
+  ],
+  "item":
+  [
+    ["yumako-greenhouse", "yumako-tree-greenhouse"],
+    ["jellynut-greenhouse", "jellystem-greenhouse"]
+  ]
+}
