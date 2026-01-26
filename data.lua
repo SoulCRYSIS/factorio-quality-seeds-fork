@@ -6,7 +6,7 @@ data:extend({
   {
       type = "technology",
       name = "fruit-cultivation",
-      icon = "__quality-seeds__/graphics/technology/cultivars.png", -- Path to your tech icon
+      icon = "__quality-seeds-fork__/graphics/technology/cultivars.png", -- Path to your tech icon
       icon_size = 256, -- Adjust to match your icon's size
       prerequisites = {"agricultural-science-pack"}, -- Add appropriate prerequisite techs
       unit = {
@@ -29,7 +29,7 @@ data:extend({
   {
     type = "technology",
     name = "space-cultivation",
-    icon = "__quality-seeds__/graphics/technology/space-cultivars.png", -- Path to your tech icon
+    icon = "__quality-seeds-fork__/graphics/technology/space-cultivars.png", -- Path to your tech icon
     icon_size = 256, -- Adjust to match your icon's size
     prerequisites = {"fruit-cultivation"}, -- Add appropriate prerequisite techs
     unit = {

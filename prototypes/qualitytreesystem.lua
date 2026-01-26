@@ -1,30 +1,21 @@
-require ("util")
+require("util")
+
+data:extend({ {
+  type = "collision-layer",
+  name = "fertile-soil"
+} })
 
 local function create_custom_collision_layer_for_plant(plant_prototype)
-
   local growable_tiles = table.deepcopy(plant_prototype.autoplace.tile_restriction)
-  growable_tiles["layers"] = {}
 
-  if settings.startup["cultivators-anywhere"].value == true then
-    growable_tiles["layers"] = {ground_tile=true}
-    return growable_tiles
+  for _, tile_name in ipairs(growable_tiles) do
+    local tile = data.raw["tile"][tile_name]
+    if tile then
+      if not tile.collision_mask then tile.collision_mask = { layers = {} } end
+      if not tile.collision_mask.layers then tile.collision_mask.layers = {} end
+      tile.collision_mask.layers["fertile-soil"] = true
+    end
   end
-
-  local collision_layer =   { 
-    type = "collision-layer", 
-    name = "growable-" .. plant_prototype.name
-  }
-
-  data.extend({
-    collision_layer
-  })
-  growable_tiles["layers"]["growable-" .. plant_prototype.name]=true
-
-  for index, tile in ipairs(growable_tiles) do
-    data.raw["tile"][tile].collision_mask.layers["growable-" .. plant_prototype.name] = true
-  end
-
-  return growable_tiles
 end
 
 local function create_quality_plant(plant_prototype, seed_prototype)
@@ -34,7 +25,7 @@ local function create_quality_plant(plant_prototype, seed_prototype)
     log("" .. plant_name .. " does not have any minable results... skipping.")
     return
   end
-  
+
   local plant_harvest_results = table.deepcopy(plant_prototype.minable.results)
 
   -- Its more balanced to have to work for your seeds. And theoretically, you could have a small mini-pentapod factory to upscale all seeds to the max anyway.
@@ -54,7 +45,7 @@ local function create_quality_plant(plant_prototype, seed_prototype)
   end
 
   local plant_icon = plant_prototype.icon
-    or (plant_prototype.icons and plant_prototype.icons[1] and plant_prototype.icons[1].icon)
+      or (plant_prototype.icons and plant_prototype.icons[1] and plant_prototype.icons[1].icon)
 
   if not plant_icon then
     log("" .. plant_name .. " does not have an icon ... skipping.")
@@ -98,22 +89,21 @@ local function create_quality_plant(plant_prototype, seed_prototype)
     return
   end
 
-  local custom_collision = false
   local tile_buildability_rules = {
     {
-      area = {{-1.0, -1.0}, {1.0, 1.0}}, 
+      area = { { -1.0, -1.0 }, { 1.0, 1.0 } },
       remove_on_collision = false
     },
   }
-  local colliding_tiles = nil
+
   if plant_prototype.autoplace and plant_prototype.autoplace.tile_restriction then
     log("Grabbing autoplace collision from " .. plant_name .. ".")
-    custom_collision = true
-    growable_tiles = create_custom_collision_layer_for_plant(plant_prototype)
+    create_custom_collision_layer_for_plant(plant_prototype)
+    growable_tiles = { layers = { ["fertile-soil"] = true } }
     tile_buildability_rules[1].required_tiles = growable_tiles
     log(serpent.block(tile_buildability_rules))
-
-  else if plant_prototype.tile_buildability_rules then
+  else
+    if plant_prototype.tile_buildability_rules then
       if plant_prototype.tile_buildability_rules[1].required_tiles then
         tile_buildability_rules[1].required_tiles = plant_prototype.tile_buildability_rules[1].required_tiles
       end
@@ -144,7 +134,7 @@ local function create_quality_plant(plant_prototype, seed_prototype)
   local seed_name = seed_prototype.name
 
   -- Create a new Collision Layer, for the Greenhouse to use.
-  local recipe_category =   {
+  local recipe_category = {
     type = "recipe-category",
     name = "cultivation-" .. plant_name
   }
@@ -156,16 +146,16 @@ local function create_quality_plant(plant_prototype, seed_prototype)
   agricultural_graphics.animation.layers = {}
 
   table.insert(agricultural_graphics.animation.layers,
-  util.sprite_load("__quality-seeds__/graphics/entity/green-house-back",
-  {
-    priority = "high",
-    animation_speed = 0.25,
-    frame_count = 1,
-    repeat_count = 64,
-    scale = 0.5
-  }))
+    util.sprite_load("__quality-seeds-fork__/graphics/entity/green-house-back",
+      {
+        priority = "high",
+        animation_speed = 0.25,
+        frame_count = 1,
+        repeat_count = 64,
+        scale = 0.5
+      }))
 
-  local shift = {variation_trunk.shift[1]+0.1, variation_trunk.shift[2]+0.0}
+  local shift = { variation_trunk.shift[1] + 0.1, variation_trunk.shift[2] + 0.0 }
 
   table.insert(agricultural_graphics.animation.layers, {
     filename = variation_trunk.filename,
@@ -190,49 +180,49 @@ local function create_quality_plant(plant_prototype, seed_prototype)
       table.insert(agricultural_graphics.animation.layers, new_layer)
     end
   else
-      local new_layer = table.deepcopy(variation_leaves)
-      if plant_name == "tree-plant" then
-        new_layer.tint = {r = 111+40, g = 123+40, b =  45+40}
-      end
-      new_layer.x = 0
-      new_layer.y = 0
-      new_layer.repeat_count = 64
-      new_layer.frame_count = 1
-      new_layer.shift = shift
-      table.insert(agricultural_graphics.animation.layers, new_layer)
+    local new_layer = table.deepcopy(variation_leaves)
+    if plant_name == "tree-plant" then
+      new_layer.tint = { r = 111 + 40, g = 123 + 40, b = 45 + 40 }
+    end
+    new_layer.x = 0
+    new_layer.y = 0
+    new_layer.repeat_count = 64
+    new_layer.frame_count = 1
+    new_layer.shift = shift
+    table.insert(agricultural_graphics.animation.layers, new_layer)
   end
 
   table.insert(agricultural_graphics.animation.layers,
-  util.sprite_load("__quality-seeds__/graphics/entity/green-house-front",
-  {
-    priority = "high",
-    animation_speed = 0.25,
-    frame_count = 64,
-    scale = 0.5
-  }))
+    util.sprite_load("__quality-seeds-fork__/graphics/entity/green-house-front",
+      {
+        priority = "high",
+        animation_speed = 0.25,
+        frame_count = 64,
+        scale = 0.5
+      }))
 
-table.insert(agricultural_graphics.animation.layers,
-  util.sprite_load("__space-age__/graphics/entity/agricultural-tower/agricultural-tower-base-shadow",
-  {
-    priority = "high",
-    frame_count = 1,
-    repeat_count = 64,
-    draw_as_shadow = true,
-    scale = 0.5
-  }))
+  table.insert(agricultural_graphics.animation.layers,
+    util.sprite_load("__space-age__/graphics/entity/agricultural-tower/agricultural-tower-base-shadow",
+      {
+        priority = "high",
+        frame_count = 1,
+        repeat_count = 64,
+        draw_as_shadow = true,
+        scale = 0.5
+      }))
 
   local cultivator_icons = {
     {
-      icon = "__quality-seeds__/graphics/icons/cultivator_back.png",
-      shift = {0.0,5}
+      icon = "__quality-seeds-fork__/graphics/icons/cultivator_back.png",
+      shift = { 0.0, 5 }
     },
     {
       icon = plant_icon,
       scale = 0.5
     },
     {
-      icon = "__quality-seeds__/graphics/icons/cultivator_front.png",
-      shift = {0.0,5}
+      icon = "__quality-seeds-fork__/graphics/icons/cultivator_front.png",
+      shift = { 0.0, 5 }
     }
   }
 
@@ -243,8 +233,8 @@ table.insert(agricultural_graphics.animation.layers,
 
   cultivator.tile_buildability_rules = tile_buildability_rules
   cultivator.effect_receiver = {} -- Remove the added productivity of the biochamber.
-  cultivator.crafting_categories = {recipe_category.name}
-  cultivator.minable = {mining_time = 0.1, result = cultivator_name}
+  cultivator.crafting_categories = { recipe_category.name }
+  cultivator.minable = { mining_time = 0.1, result = cultivator_name }
   cultivator.fast_replaceable_group = "greenhouse"
   cultivator.place_result = cultivator_name
   cultivator.circuit_connector = circuit_connector_definitions[cultivator_name]
@@ -257,12 +247,12 @@ table.insert(agricultural_graphics.animation.layers,
       pipe_connections =
       {
         {
-          flow_direction="input",
+          flow_direction = "input",
           direction = defines.direction.north,
-          position = {0, -1}
+          position = { 0, -1 }
         }
       },
-      filter="water"
+      filter = "water"
     },
     {
       production_type = "output",
@@ -272,32 +262,33 @@ table.insert(agricultural_graphics.animation.layers,
         {
           flow_direction = "output",
           direction = defines.direction.south,
-          position = {0, 1}
+          position = { 0, 1 }
         }
       }
     }
   }
   cultivator.icons = cultivator_icons
-  cultivator.localised_name = {"?", {"",{"entity-name."..plant_name}, " Cultivator"}, "Tree Cultivator"}
-  cultivator.localised_description = {"?", {"","A specialised facility for propagating ", {"entity-name."..plant_name}},"A specialised facility for propagating trees."}
+  cultivator.localised_name = { "?", { "", { "entity-name." .. plant_name }, " Cultivator" }, "Tree Cultivator" }
+  cultivator.localised_description = { "?", { "", "A specialised facility for propagating ", { "entity-name." .. plant_name } },
+    "A specialised facility for propagating trees." }
 
   cultivator.fluid_boxes_off_when_no_fluid_recipe = false
-  cultivator.collision_mask = {layers={object=true, train=true, is_object=true, is_lower_object=true}} -- collide just with object-layer and train-layer which don't collide with water, this allows us to build on water for water plants like slipstacks.
+  cultivator.collision_mask = { layers = { object = true, train = true, is_object = true, is_lower_object = true } } -- collide just with object-layer and train-layer which don't collide with water, this allows us to build on water for water plants like slipstacks.
 
   -- Emissions logic:
-  local spore_emmisions = {spores = 0}
+  local spore_emmisions = { spores = 0 }
   if plant_prototype.harvest_emissions and plant_prototype.harvest_emissions.spores then
     spore_emmisions.spores = plant_prototype.harvest_emissions.spores * 2
   end
-  cultivator.energy_source.emissions_per_minute = {spores = 0, pollution = -1}--spore_emmisions --emissions_per_m
-   -- We do this because trees take many minutes to grow. But still, use some Efficiency modules!
+  cultivator.energy_source.emissions_per_minute = { spores = 0, pollution = -1 } --spore_emmisions --emissions_per_m
+  -- We do this because trees take many minutes to grow. But still, use some Efficiency modules!
 
   -- Recipe for Cultivator:
   local cultivator_recipe = {
     type = "recipe",
     name = cultivator_name,
-    localised_name = {"?", {"",{"entity-name."..plant_name}, " Cultivator"}, "Tree Cultivator"},
-    localised_description = {"?", {"","A specialised facility for propagating ", {"entity-name."..plant_name}},"A specialised facility for propagating trees."},
+    localised_name = { "?", { "", { "entity-name." .. plant_name }, " Cultivator" }, "Tree Cultivator" },
+    localised_description = { "?", { "", "A specialised facility for propagating ", { "entity-name." .. plant_name } }, "A specialised facility for propagating trees." },
     category = "organic-or-assembling",
     surface_conditions =
     {
@@ -310,13 +301,13 @@ table.insert(agricultural_graphics.animation.layers,
     energy_required = 20,
     ingredients =
     {
-      {type = "item", name = "nutrients", amount = 5},
-      {type = "item", name = seed_name, amount = 1},
-      {type = "item", name = "steel-plate", amount = 20},
-      {type = "item", name = "advanced-circuit", amount = 5},
-      {type = "item", name = "landfill", amount = 9}
+      { type = "item", name = "nutrients",        amount = 5 },
+      { type = "item", name = seed_name,          amount = 1 },
+      { type = "item", name = "steel-plate",      amount = 20 },
+      { type = "item", name = "advanced-circuit", amount = 5 },
+      { type = "item", name = "landfill",         amount = 9 }
     },
-    results = {{type="item", name=cultivator_name, amount=1}},
+    results = { { type = "item", name = cultivator_name, amount = 1 } },
     enabled = false,
     icons = cultivator_icons
   }
@@ -324,7 +315,7 @@ table.insert(agricultural_graphics.animation.layers,
   local cultivator_recipe_recycling = {
     type = "recipe",
     name = cultivator_name .. "-recycling",
-    localised_name = {"?", {"",{"entity-name."..plant_name}, " Cultivator Recycling"}, "Tree Cultivator Recycling"},
+    localised_name = { "?", { "", { "entity-name." .. plant_name }, " Cultivator Recycling" }, "Tree Cultivator Recycling" },
     icon = nil,
     --subgroup = item.subgroup,
     icons = {
@@ -332,16 +323,16 @@ table.insert(agricultural_graphics.animation.layers,
         icon = "__quality__/graphics/icons/recycling.png"
       },
       {
-        icon = "__quality-seeds__/graphics/icons/cultivator_back.png",
-        shift = {0.0,5}
+        icon = "__quality-seeds-fork__/graphics/icons/cultivator_back.png",
+        shift = { 0.0, 5 }
       },
       {
         icon = plant_icon,
         scale = 0.5
       },
       {
-        icon = "__quality-seeds__/graphics/icons/cultivator_front.png",
-        shift = {0.0,5}
+        icon = "__quality-seeds-fork__/graphics/icons/cultivator_front.png",
+        shift = { 0.0, 5 }
       },
       {
         icon = "__quality__/graphics/icons/recycling-top.png"
@@ -351,15 +342,15 @@ table.insert(agricultural_graphics.animation.layers,
     hidden = true,
     enabled = true,
     unlock_results = false,
-    ingredients = {{type = "item", name = cultivator_name, amount = 1, ignored_by_stats = 1}},
+    ingredients = { { type = "item", name = cultivator_name, amount = 1, ignored_by_stats = 1 } },
     results = {
-      {type = "item", name = "nutrients", amount = 5, probability = 0.25, ignored_by_stats = 5},
-      {type = "item", name = seed_name, amount = 1, probability = 0.25, ignored_by_stats = 1},
-      {type = "item", name = "steel-plate", amount = 20, probability = 0.25, ignored_by_stats = 20},
-      {type = "item", name = "advanced-circuit", amount = 5, probability = 0.25, ignored_by_stats = 5},
-      {type = "item", name = "landfill", amount = 9, probability = 0.25, ignored_by_stats = 9}
+      { type = "item", name = "nutrients",        amount = 5,  probability = 0.25, ignored_by_stats = 5 },
+      { type = "item", name = seed_name,          amount = 1,  probability = 0.25, ignored_by_stats = 1 },
+      { type = "item", name = "steel-plate",      amount = 20, probability = 0.25, ignored_by_stats = 20 },
+      { type = "item", name = "advanced-circuit", amount = 5,  probability = 0.25, ignored_by_stats = 5 },
+      { type = "item", name = "landfill",         amount = 9,  probability = 0.25, ignored_by_stats = 9 }
     }, -- Will show as consumed when item is destroyed
-    energy_required = 20/16,
+    energy_required = 20 / 16,
     crafting_machine_tint = processing_tint
   }
 
@@ -367,12 +358,12 @@ table.insert(agricultural_graphics.animation.layers,
   cultivator_item.name = cultivator_name
   cultivator_item.place_result = cultivator_name
   cultivator_item.icons = cultivator_icons
-  cultivator_item.order = "a[agricultural-tower]-b[greenhouse]-c["..plant_name.."]"
+  cultivator_item.order = "a[agricultural-tower]-b[greenhouse]-c[" .. plant_name .. "]"
 
-  local spore_result = {type = "fluid", name = "spores", amount = spore_emmisions.spores * spore_multiplier, ignored_by_productivity = 100}
-  local steam_result = {type = "fluid", name = "steam", amount = 100, ignored_by_productivity = 100, temperature = 180}
+  local spore_result = { type = "fluid", name = "spores", amount = spore_emmisions.spores * spore_multiplier, ignored_by_productivity = 100 }
+  local steam_result = { type = "fluid", name = "steam", amount = 100, ignored_by_productivity = 100, temperature = 180 }
 
-  local input_fluid = {type = "fluid", name = "water", amount = 100}
+  local input_fluid = { type = "fluid", name = "water", amount = 100 }
 
   plant_harvest_results_space = table.deepcopy(plant_harvest_results)
 
@@ -393,15 +384,15 @@ table.insert(agricultural_graphics.animation.layers,
     type = "recipe",
     name = "cultivate-" .. plant_name,
     icon = plant_icon,
-    category = "cultivation-"..plant_name,
-    localised_name = {"?", {"","Cultivate ",{"entity-name."..plant_name}}, "Cultivate Trees"},
-    localised_description = {"?", {"","Cultivate ",{"entity-name."..plant_name}}, "Cultivate Trees"},
+    category = "cultivation-" .. plant_name,
+    localised_name = { "?", { "", "Cultivate ", { "entity-name." .. plant_name } }, "Cultivate Trees" },
+    localised_description = { "?", { "", "Cultivate ", { "entity-name." .. plant_name } }, "Cultivate Trees" },
     enabled = false,
     hidden = false,
     result_is_always_fresh = true,
     preserve_products_in_machine_output = true,
     ingredients = {
-      {type = "item", name = seed_name, amount = 1},
+      { type = "item", name = seed_name, amount = 1 },
       input_fluid
     },
     energy_required = (plant_prototype.growth_ticks / 60) * 1.5, -- / 60 to normalise for 60 UPS.
@@ -416,19 +407,19 @@ table.insert(agricultural_graphics.animation.layers,
     name = "cultivate-space-" .. plant_name,
     icon = plant_icon,
     category = "space-cultivation",
-    localised_name = {"?", {"","Cultivate ",{"entity-name."..plant_name}, " ... in space!"}, "Cultivate Trees ... in space!"},
-    localised_description = {"?", {"","Cultivate ",{"entity-name."..plant_name}, " ... in space!"}, "Cultivate Trees ... in space!"},
+    localised_name = { "?", { "", "Cultivate ", { "entity-name." .. plant_name }, " ... in space!" }, "Cultivate Trees ... in space!" },
+    localised_description = { "?", { "", "Cultivate ", { "entity-name." .. plant_name }, " ... in space!" }, "Cultivate Trees ... in space!" },
     enabled = false,
     hidden = false,
     result_is_always_fresh = true,
     preserve_products_in_machine_output = true,
     ingredients = {
-      {type = "item", name = seed_name, amount = 1},
-      {type = "fluid", name = "water", amount = 100}
+      { type = "item",  name = seed_name, amount = 1 },
+      { type = "fluid", name = "water",   amount = 100 }
     },
     energy_required = (plant_prototype.growth_ticks / 60) * 0.25, -- / 60 to normalise for 60 UPS. Things grow faster in space!
     results = plant_harvest_results_space,
-    allow_productivity = true, -- True, because fuck it we ball, this is the end of the game.
+    allow_productivity = true,                                    -- True, because fuck it we ball, this is the end of the game.
     crafting_machine_tint = processing_tint,
     surface_conditions =
     {
@@ -444,21 +435,21 @@ table.insert(agricultural_graphics.animation.layers,
   local recipe_gmo = {
     type = "recipe",
     name = "gmo-" .. plant_name,
-    localised_name = {"?", {"",{"item-name."..seed_name}, " Cultivator"}, " Symbiosis"},
-    localised_description = {"?", {"","Treating ",{"item-name."..seed_name}, " with a pentapod and spores may generate a better seed."}, " Symbiosis"},
-    order = "d[organic-processing]-a[".. seed_name .."]",
+    localised_name = { "?", { "", { "item-name." .. seed_name }, " Cultivator" }, " Symbiosis" },
+    localised_description = { "?", { "", "Treating ", { "item-name." .. seed_name }, " with a pentapod and spores may generate a better seed." }, " Symbiosis" },
+    order = "d[organic-processing]-a[" .. seed_name .. "]",
     category = "organic",
     enabled = false,
     ingredients = {
-      {type = "item", name = seed_name, amount = 1},
-      {type = "item", name = "pentapod-egg", amount = 1},
-      {type = "fluid", name = "spores", amount = 100, ignored_by_stats = 100}
+      { type = "item",  name = seed_name,      amount = 1 },
+      { type = "item",  name = "pentapod-egg", amount = 1 },
+      { type = "fluid", name = "spores",       amount = 100, ignored_by_stats = 100 }
     },
     energy_required = 5,
     results = {
-      {type = "item", name = seed_name, amount = 1},
-      {type = "item", name = "pentapod-egg", amount = 1, probability = 0.5},
-      {type = "fluid", name = "spores", amount = 100, ignored_by_stats = 100}
+      { type = "item",  name = seed_name,      amount = 1 },
+      { type = "item",  name = "pentapod-egg", amount = 1,   probability = 0.5 },
+      { type = "fluid", name = "spores",       amount = 100, ignored_by_stats = 100 }
     },
     main_product = seed_name,
     allow_productivity = false,
@@ -469,7 +460,7 @@ table.insert(agricultural_graphics.animation.layers,
       {
         icon = data.raw.fluid["spores"].icon,
         scale = 0.8,
-        shift = {0,0}
+        shift = { 0, 0 }
       },
       {
         icon = "__quality__/graphics/icons/recycling.png"
@@ -477,7 +468,7 @@ table.insert(agricultural_graphics.animation.layers,
       {
         icon = data.raw.item["pentapod-egg"].icon,
         scale = 0.4,
-        shift = {0,0}
+        shift = { 0, 0 }
       },
       {
         icon = "__quality__/graphics/icons/recycling-top.png"
@@ -485,36 +476,41 @@ table.insert(agricultural_graphics.animation.layers,
       {
         icon = seed_prototype.icon or (seed_prototype.icons and seed_prototype.icons[1] and seed_prototype.icons[1].icon),
         scale = 0.5,
-        shift = {5.0,5.0}
+        shift = { 5.0, 5.0 }
       },
     }
   }
 
-  data:extend{
-    recipe_category, 
-    recipe_gmo, 
-    recipe_cultivate, 
-    recipe_cultivate_space, 
+  data:extend {
+    recipe_category,
+    recipe_gmo,
+    recipe_cultivate,
+    recipe_cultivate_space,
     cultivator_recipe_recycling,
     cultivator,
-    cultivator_item, 
+    cultivator_item,
     cultivator_recipe
   }
 
-  table.insert(data.raw.technology["space-cultivation"]["effects"], {type = "unlock-recipe", recipe = recipe_cultivate_space.name})
+  table.insert(data.raw.technology["space-cultivation"]["effects"],
+    { type = "unlock-recipe", recipe = recipe_cultivate_space.name })
 
   -- Override for Boompuff-plant agriculture mod, so that you can't just grow boompuffs.
   if plant_name == "boompuff-plant" and data.raw.technology["boompuff-ascension"] then
-      table.insert(data.raw.technology["boompuff-ascension"]["effects"], {type = "unlock-recipe", recipe = recipe_cultivate.name})
-      table.insert(data.raw.technology["boompuff-ascension"]["effects"], {type = "unlock-recipe", recipe = cultivator_recipe.name})
-      table.insert(data.raw.technology["boompuff-ascension"]["effects"], {type = "unlock-recipe", recipe = recipe_gmo.name})
+    table.insert(data.raw.technology["boompuff-ascension"]["effects"],
+      { type = "unlock-recipe", recipe = recipe_cultivate.name })
+    table.insert(data.raw.technology["boompuff-ascension"]["effects"],
+      { type = "unlock-recipe", recipe = cultivator_recipe.name })
+    table.insert(data.raw.technology["boompuff-ascension"]["effects"], { type = "unlock-recipe", recipe = recipe_gmo
+    .name })
     return
   end
 
-  table.insert(data.raw.technology["fruit-cultivation"]["effects"], {type = "unlock-recipe", recipe = recipe_cultivate.name})
-  table.insert(data.raw.technology["fruit-cultivation"]["effects"], {type = "unlock-recipe", recipe = cultivator_recipe.name})
-  table.insert(data.raw.technology["fruit-cultivation"]["effects"], {type = "unlock-recipe", recipe = recipe_gmo.name})
-
+  table.insert(data.raw.technology["fruit-cultivation"]["effects"],
+    { type = "unlock-recipe", recipe = recipe_cultivate.name })
+  table.insert(data.raw.technology["fruit-cultivation"]["effects"],
+    { type = "unlock-recipe", recipe = cultivator_recipe.name })
+  table.insert(data.raw.technology["fruit-cultivation"]["effects"], { type = "unlock-recipe", recipe = recipe_gmo.name })
 end
 
 log("Looking for plants to quality...")

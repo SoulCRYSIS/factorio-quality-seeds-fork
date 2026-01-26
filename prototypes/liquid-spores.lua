@@ -2,7 +2,7 @@
 local spore_tower = table.deepcopy(data.raw["assembling-machine"]["biochamber"])
 spore_tower.name = "spore-tower"
 spore_tower.type = "furnace"
-spore_tower.icon = "__quality-seeds__/graphics/icons/spore-tower.png"
+spore_tower.icon = "__quality-seeds-fork__/graphics/icons/spore-tower.png"
 spore_tower.minable.result = "spore-tower"
 spore_tower.energy_usage = "1kW"
 spore_tower.ingredient_count = 1
@@ -16,7 +16,7 @@ spore_tower.graphics_set = {
   {
     layers =
     {
-      util.sprite_load("__quality-seeds__/graphics/entity/spore-tower",
+      util.sprite_load("__quality-seeds-fork__/graphics/entity/spore-tower",
       {
         animation_speed = animation_speed,
         frame_count = 1,
@@ -99,7 +99,7 @@ spore_tower.energy_source = {
 }
 
 local pipe_pictures_1 = table.deepcopy(require("__space-age__.prototypes.entity.biochamber-pictures").pipe_pictures_1)
-pipe_pictures_1.north.layers[1] = util.sprite_load("__quality-seeds__/graphics/entity/biochamber-pipes-north-1",
+pipe_pictures_1.north.layers[1] = util.sprite_load("__quality-seeds-fork__/graphics/entity/biochamber-pipes-north-1",
 {
   scale = 0.5,
   shift = {1,2},
@@ -130,7 +130,7 @@ spore_tower.fluid_boxes =
 local spore_tower_item = table.deepcopy(data.raw["item"]["biochamber"])
 spore_tower_item.name = spore_tower.name
 spore_tower_item.place_result = spore_tower.name
-spore_tower_item.icon = "__quality-seeds__/graphics/icons/spore-tower.png"
+spore_tower_item.icon = "__quality-seeds-fork__/graphics/icons/spore-tower.png"
 spore_tower_item.order = "a[agricultural-tower]-b[spore-vent]"
 
 local spore_recipe = {
@@ -145,7 +145,7 @@ local spore_recipe = {
       {type="fluid", name="spores", amount=100}
     },
     results = {},
-    icon = "__quality-seeds__/graphics/icons/spores.png",
+    icon = "__quality-seeds-fork__/graphics/icons/spores.png",
     subgroup = "fluid-recipes",
     order = "z[incineration]"
   }
@@ -164,7 +164,7 @@ local spore_tower_recipe = {
     },
     results = {{type="item", name=spore_tower.name, amount=1}},
     enabled = false,
-    icon = "__quality-seeds__/graphics/icons/spore-tower.png"
+    icon = "__quality-seeds-fork__/graphics/icons/spore-tower.png"
   }
 
 local spore_fluid = {
@@ -178,7 +178,7 @@ local spore_fluid = {
     heat_capacity = "2kJ",
     base_color = {0.48, 0.39, 0.14},
     flow_color = {0.77, 0.63, 0.24},
-    icon = "__quality-seeds__/graphics/icons/spores.png",
+    icon = "__quality-seeds-fork__/graphics/icons/spores.png",
     order = "a[fluid]-b[agriculture]-a[spores]",
     auto_barrel = false
 }

@@ -24,13 +24,13 @@ local space_cultivator_recipe = {
     },
     results = {{type="item", name="space-cultivator", amount=1}},
     enabled = false,
-    icon = "__quality-seeds__/graphics/icons/space-cultivator.png"
+    icon = "__quality-seeds-fork__/graphics/icons/space-cultivator.png"
 }
 
 local space_cultivator_item = table.deepcopy(data.raw["item"]["biochamber"])
 space_cultivator_item.name = "space-cultivator"
 space_cultivator_item.place_result = "space-cultivator"
-space_cultivator_item.icon = "__quality-seeds__/graphics/icons/space-cultivator.png"
+space_cultivator_item.icon = "__quality-seeds-fork__/graphics/icons/space-cultivator.png"
 space_cultivator_item.order = "a[agricultural-tower]-b[greenhouse]-z[space-cultivator]"
 
 local space_cultivator = table.deepcopy(data.raw["assembling-machine"]["biochamber"])
@@ -39,7 +39,7 @@ local space_cultivator_graphics = {
   {
     layers =
     {
-      util.sprite_load("__quality-seeds__/graphics/entity/space-cultivator-anim",
+      util.sprite_load("__quality-seeds-fork__/graphics/entity/space-cultivator-anim",
       {
         priority = "high",
         animation_speed = 0.25,
@@ -62,7 +62,7 @@ local space_cultivator_graphics = {
     {
       always_draw = true,
       fog_mask = { rect = {{-30, -30}, {30, -2.75}}, falloff = 1 },
-      animation = util.sprite_load("__quality-seeds__/graphics/entity/space-cultivator-anim",
+      animation = util.sprite_load("__quality-seeds-fork__/graphics/entity/space-cultivator-anim",
       {
         frame_count = 1,
         scale = 0.5
@@ -73,7 +73,7 @@ local space_cultivator_graphics = {
       --constant_speed = true,
       always_draw = true,
       apply_recipe_tint = "primary",
-      animation = util.sprite_load("__quality-seeds__/graphics/entity/space-cultivator-plants-mask",
+      animation = util.sprite_load("__quality-seeds-fork__/graphics/entity/space-cultivator-plants-mask",
       {
         priority = "high",
         frame_count = 64,
@@ -87,7 +87,7 @@ local space_cultivator_graphics = {
       apply_recipe_tint = "secondary",
       effect = "flicker",
       fadeout = true,
-      animation = util.sprite_load("__quality-seeds__/graphics/entity/space-cultivator-lights",
+      animation = util.sprite_load("__quality-seeds-fork__/graphics/entity/space-cultivator-lights",
       {
         priority = "high",
         frame_count = 64,
@@ -132,7 +132,7 @@ local pipe_pictures_1 =
   north =
   {
     layers = {
-      util.sprite_load("__quality-seeds__/graphics/entity/pipes-north",
+      util.sprite_load("__quality-seeds-fork__/graphics/entity/pipes-north",
       {
         scale = 0.5,
         shift = {0,1},
@@ -141,7 +141,7 @@ local pipe_pictures_1 =
   },
   east = {
     layers = {
-      util.sprite_load("__quality-seeds__/graphics/entity/pipes-east",
+      util.sprite_load("__quality-seeds-fork__/graphics/entity/pipes-east",
       {
         scale = 0.5,
         shift = {-1,0},
@@ -150,7 +150,7 @@ local pipe_pictures_1 =
   },
   south = {
     layers = {
-      util.sprite_load("__quality-seeds__/graphics/entity/pipes-south",
+      util.sprite_load("__quality-seeds-fork__/graphics/entity/pipes-south",
       {
         scale = 0.5,
         shift = {0,-1},
@@ -159,7 +159,7 @@ local pipe_pictures_1 =
   },
   west = {
     layers = {
-      util.sprite_load("__quality-seeds__/graphics/entity/pipes-west",
+      util.sprite_load("__quality-seeds-fork__/graphics/entity/pipes-west",
       {
         scale = 0.5,
         shift = {1,0},
@@ -199,7 +199,7 @@ space_cultivator.fluid_boxes =
         },
     }
 }
-space_cultivator.icon = "__quality-seeds__/graphics/icons/space-cultivator.png"
+space_cultivator.icon = "__quality-seeds-fork__/graphics/icons/space-cultivator.png"
 space_cultivator.localised_name = "Space Cultivator"
 space_cultivator.localised_description = "A specialised facility for propagating plants in space!"
 space_cultivator.fluid_boxes_off_when_no_fluid_recipe = true
@@ -217,7 +217,7 @@ local space_cultivator_recipe_recycling = {
       icon = "__quality__/graphics/icons/recycling.png"
     },
     {
-      icon = "__quality-seeds__/graphics/icons/space-cultivator.png",
+      icon = "__quality-seeds-fork__/graphics/icons/space-cultivator.png",
       scale = 0.4
     },    
     {
