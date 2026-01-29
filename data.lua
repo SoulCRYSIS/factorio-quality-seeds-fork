@@ -67,8 +67,25 @@ data.raw["recipe"]["pentapod-egg"].hide_from_signal_gui = false
 -- Define the global ignore list if not already defined
 quality_seeds = quality_seeds or {}
 quality_seeds.ignore_plants = quality_seeds.ignore_plants or {}
-quality_seeds.allow_plants = quality_seeds.allow_plants or {}
+quality_seeds.allow_plants = quality_seeds.allow_plants or {
+  "yumako-tree",
+  "jellystem",
+  "tree-plant",
+}
 
+if mods["demolisher-agriculture"] then
+  table.insert(quality_seeds.allow_plants, "demolisher-pupae")
+end
+
+if mods["boompuff-agriculture"] then
+  table.insert(quality_seeds.allow_plants, "boompuff-plant")
+end
+
+if mods["wayward-seas"] then
+  table.insert(quality_seeds.allow_plants, "sunnycomb-plant")
+  table.insert(quality_seeds.allow_plants, "cuttlepop-plant")
+  table.insert(quality_seeds.allow_plants, "water-cane-plant")
+end
 
 if mods["zen-garden"] then
   table.insert(quality_seeds.ignore_plants, "tree-plant-acacia")

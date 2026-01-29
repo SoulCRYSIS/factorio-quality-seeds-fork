@@ -526,7 +526,7 @@ for _, name in pairs(quality_seeds.ignore_plants or {}) do
   ignore_set[name] = true
 end
 
-if #quality_seeds.allow_plants == 0 then
+if settings.startup["default-all-plants-cultivation"].value then
   for _, plant in pairs(data.raw["plant"]) do
     if not ignore_set[plant.name] then
       log("Processing plant " .. plant.name)
